@@ -15,9 +15,10 @@ export class BookRepository extends Repository<Book> {
     async getBooks(user: User, filter: FilterBookDto): Promise<Book[]> {
     const { title, author, category, min_year, max_year } = filter;
 
-    const query = this.createQueryBuilder('book').where(
-        'book.userId = :userId',
-        { userId: user.id },
+    const query = this.createQueryBuilder('book')
+        .where(
+            'book.userId = :userId',
+            { userId: user.id },
         );
 
         if (title) {
@@ -39,7 +40,7 @@ export class BookRepository extends Repository<Book> {
         return query.getMany();
     }
 
-    async createBook(createBookDto: CreateBookDto): Promise<void> {
+    async createBook(user: User, createBookDto: CreateBookDto): Promise<void> {
         const { title, author, category, year } = createBookDto;
 
         const book = this.create();
@@ -47,6 +48,7 @@ export class BookRepository extends Repository<Book> {
         book.author = author;
         book.category = category;
         book.year = year;
+        book.user = user;
 
         try {
             await book.save();
