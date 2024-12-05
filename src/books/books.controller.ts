@@ -23,26 +23,36 @@ export class BooksController {
     }
 
     @Get('/:id')
-    async getBookById(@Param('id', UUIDValidationPipe) id: string): Promise<Book> {
-        return this.booksService.getBookById(id);
+    async getBookById(
+        @GetUser() user: User, 
+        @Param('id', UUIDValidationPipe) id: string)
+            : Promise<Book> {
+            return this.booksService.getBookById(user, id);
     }
 
     @Post()
-    async createBook(@Body() payload: CreateBookDto) : Promise<void> {
+    async createBook(
+        @GetUser() user: User, 
+        @Body() payload: CreateBookDto
+    ) : Promise<void> {
         console.log(payload);
-        return this.booksService.createBook(payload);
+        return this.booksService.createBook(user, payload);
     }
 
     @Put('/:id')
     async updateBook(
+        @GetUser() user: User, 
         @Param('id', UUIDValidationPipe) id: string,  
         @Body() payload: UpdateBookDto,
     ): Promise<void> {
-        return this.booksService.updateBook(id, payload);
+        return this.booksService.updateBook(user, id, payload);
     }
 
     @Delete('/:id')
-    async deleteBookById(@Param('id', UUIDValidationPipe) id: string): Promise<void> {
-        return this.booksService.deleteBookById(id);
+    async deleteBookById(
+        @GetUser() user: User,
+        @Param('id', UUIDValidationPipe) id: string)
+        : Promise<void> {
+            return this.booksService.deleteBookById(user, id);
     }
 }
