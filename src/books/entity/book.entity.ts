@@ -4,7 +4,7 @@ import {
     BaseEntity, 
     PrimaryGeneratedColumn, 
     Column, 
-    ManyToMany 
+    ManyToOne
 } from "typeorm";
 
 @Entity()
@@ -24,11 +24,7 @@ export class Book extends BaseEntity {
     @Column()
     year: number;
 
-    @ManyToMany(() => User, (user) => user.books)
+    @ManyToOne(() => User, (user) => user.books)
     user: User;
-
-    // @Column({ nullable: true })
-    // userId: number;
-
 }
 
